@@ -6,7 +6,7 @@ using UnityEngine;
 public class ActionNode : Node, IActionNode, IObserver<ActionState>
 {
     // コンストラクタ
-    protected ActionNode(NodeType type, NodeState state) : base(type, state) {}
+    internal ActionNode(NodeType type) : base(type) {}
 
     // 実行するアクション
     private IActionable action;
@@ -21,9 +21,6 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
             this.action = value;
         }
     }
-
-    // ノードの状態通知用observable
-    private NodeObservable nodeObservable;
 
     public void Execute() {
         if (this.action == null) {
@@ -60,21 +57,38 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
     public void OnCompleted()
     {
         Debug.Log("ActionNode OnCompleted");
+        SetNodeState(NodeState.Complete);
+        nodeObservable.SendComplete();
     }
 
     public void OnError(Exception error)
     {
         Debug.Log("ActionNode OnError: " + error.Message);
+        nodeObservable.SendError(error);
     }
 
     public void OnNext(ActionState value)
     {
-        Debug.Log("Action Node OnNext: " + value);
-    }
+        switch (value) {
+            case ActionState.None:
+                break;
+            case ActionState.Start:
+                SetNodeState(NodeState.Start);
+                nodeObservable.SendState(GetNodeState());
+                break;
+            case ActionState.Running:
+                SetNodeState(NodeState.Running);
+                nodeObservable.SendState(GetNodeState());
+                break;
+            case ActionState.Finished:
+                SetNodeState(NodeState.Complete);
+                nodeObservable.SendState(GetNodeState());
+                break;
+            default:
+                Debug.Assert(false, "undefined Action State in ActionNode.OnNext");
+                break;
+        }
 
-    public IDisposable Subscribe(IObserver<NodeState> observer)
-    {
-        nodeObservable = new NodeObservable();
-        return nodeObservable.Subscribe(observer);
+        Debug.Log("Action Node OnNext: " + value);
     }
 }

@@ -1,6 +1,8 @@
-﻿using NodeId = System.Int64;
+﻿using System;
+using UnityEngine;
+using NodeId = System.Int64;
 
-public abstract class Node
+public abstract class Node : INode
 {
     /// <summary>
     /// ノードのタイプ
@@ -18,13 +20,18 @@ public abstract class Node
     private NodeId id;
     public NodeId Id {
         get {
+            Debug.Assert(id != 0, "this node has no id. you must be use Node.CreateNode when you create Node");
             return this.id;
         }
     }
 
-    protected Node(NodeType type, NodeState state) {
+    /// <summary>
+    /// ノードの状態通知用observable
+    /// </summary> 
+    protected NodeObservable nodeObservable;
+
+    protected Node(NodeType type) {
         this.nodeType = type;
-        this.nodeState = state;
     }
 
     public virtual NodeState GetNodeState() {
@@ -35,10 +42,18 @@ public abstract class Node
         this.nodeState = state;
     }
 
+    public IDisposable Subscribe(IObserver<NodeState> observer)
+    {
+        nodeObservable = new NodeObservable();
+        return nodeObservable.Subscribe(observer);
+    }
+
+    public void Init(Int64 id) {
+        this.id = id;
+        SetNodeState(NodeState.Init);
+    }
+
     public abstract void Activate();
     public abstract void Deactivate();
     public abstract NodeState OnUpdate();
-    //public Node Create(NodeType) {
-
-    //}
 }

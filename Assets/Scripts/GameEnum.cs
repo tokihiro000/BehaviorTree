@@ -1,13 +1,16 @@
 ﻿public enum NodeState
 {
     None,
-    Enable,
+    Init,
+    Start,
     Running,
+    Complete,
     Disable
 }
 
 public enum NodeType
 {
+    Root,
     Selector,
     Sequencer,
     Action

@@ -1,5 +1,4 @@
-﻿using System;
-public interface IActionNode
+﻿public interface IActionNode
 {
     IActionable Action
     {
@@ -7,8 +6,5 @@ public interface IActionNode
         set;
     }
 
-    IDisposable Subscribe(IObserver<NodeState> observer);
-    NodeState GetNodeState();
-    void SetNodeState(NodeState state);
     void Execute();
 }
