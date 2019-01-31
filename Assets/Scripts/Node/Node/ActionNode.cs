@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,7 +21,7 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
         }
     }
 
-    public void Execute() {
+    public void ExecuteAction() {
         if (this.action == null) {
             Debug.Assert(false, "ノードID: " + this.Id + " is not assigned action");
             SetNodeState(NodeState.Disable);
@@ -41,7 +40,19 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
 
     public override void Activate()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("ActionNode Activate");
+        base.Activate();
+    }
+
+    public override void StartProcess()
+    {
+        base.StartProcess();
+    }
+
+    public override void Run()
+    {
+        base.Run();
+        ExecuteAction();
     }
 
     public override void Deactivate()
@@ -49,40 +60,37 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
         throw new System.NotImplementedException();
     }
 
-    public override NodeState OnUpdate()
+    public override void AddNode(Node node)
     {
-        throw new System.NotImplementedException();
+        Debug.Assert(false, "ID: " + this.Id + " にはノードを追加することはできません");
     }
 
-    public void OnCompleted()
+    void IObserver<ActionState>.OnCompleted()
     {
         Debug.Log("ActionNode OnCompleted");
-        SetNodeState(NodeState.Complete);
+        executeResult = new ExecuteResult(ExecuteResultState.Success);
         nodeObservable.SendComplete();
+        SetNodeState(NodeState.Complete);
     }
 
-    public void OnError(Exception error)
+    void IObserver<ActionState>.OnError(Exception error)
     {
         Debug.Log("ActionNode OnError: " + error.Message);
+        executeResult = new ExecuteResult(ExecuteResultState.Failure);
         nodeObservable.SendError(error);
+        SetNodeState(NodeState.Complete);
     }
 
-    public void OnNext(ActionState value)
+    void IObserver<ActionState>.OnNext(ActionState value)
     {
         switch (value) {
             case ActionState.None:
                 break;
             case ActionState.Start:
-                SetNodeState(NodeState.Start);
-                nodeObservable.SendState(GetNodeState());
                 break;
             case ActionState.Running:
-                SetNodeState(NodeState.Running);
-                nodeObservable.SendState(GetNodeState());
                 break;
             case ActionState.Finished:
-                SetNodeState(NodeState.Complete);
-                nodeObservable.SendState(GetNodeState());
                 break;
             default:
                 Debug.Assert(false, "undefined Action State in ActionNode.OnNext");
@@ -90,5 +98,10 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
         }
 
         Debug.Log("Action Node OnNext: " + value);
+    }
+
+    public override bool IsRoot()
+    {
+        return false;
     }
 }

@@ -3,7 +3,7 @@
 public class NodeObservable : IObservable<NodeState>
 {
     public NodeObserverDisposer disposer;
-    public NodeObserver observer;
+    public IObserver<NodeState> observer;
 
     public void SendState(NodeState state)
     {
@@ -24,7 +24,8 @@ public class NodeObservable : IObservable<NodeState>
     //監視人を割り当てて監視開始
     public IDisposable Subscribe(IObserver<NodeState> observer)
     {
-        observer = (NodeObserver)observer;
+        //observer = (NodeObserver)observer;
+        this.observer = observer;
         disposer = new NodeObserverDisposer(this);
         return disposer;
     }

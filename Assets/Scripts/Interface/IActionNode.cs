@@ -6,5 +6,5 @@
         set;
     }
 
-    void Execute();
+    void ExecuteAction();
 }

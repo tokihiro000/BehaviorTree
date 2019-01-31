@@ -4,6 +4,7 @@
     Init,
     Start,
     Running,
+    WaitForChild,
     Complete,
     Disable
 }
@@ -22,4 +23,11 @@ public enum ActionState
     Start,
     Running,
     Finished
+}
+
+public enum ExecuteResultState
+{
+    None,
+    Success,
+    Failure
 }

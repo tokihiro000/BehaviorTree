@@ -23,7 +23,7 @@ public class ActionObservable : IObservable<ActionState>
     //監視人を割り当てて監視開始
     public IDisposable Subscribe(IObserver<ActionState> observer)
     {
-        observer = (ActionObserver)observer;
+        this.observer = observer;
         disposer = new ActionObserverDisposer(this);
         return disposer;
     }
