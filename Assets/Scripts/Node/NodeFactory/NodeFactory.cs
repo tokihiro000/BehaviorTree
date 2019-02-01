@@ -23,6 +23,12 @@ public class NodeFactory : INodeFactory
             case NodeType.Action:
                 node = new ActionNode(nodeType);
                 break;
+            case NodeType.Sequencer:
+                node = new SequencerNode(nodeType);
+                break;
+            case NodeType.Selector:
+                node = new SelectorNode(nodeType);
+                break;
             default:
                 Debug.Assert(false, "未定義のノードタイプ");
                 break;
@@ -31,7 +37,7 @@ public class NodeFactory : INodeFactory
         if (node != null)
         {
             node.Init(idSeed);
-            RegisterNode(node.Id, node);
+            RegisterNode(idSeed, node);
             idSeed += 1;
         }
 

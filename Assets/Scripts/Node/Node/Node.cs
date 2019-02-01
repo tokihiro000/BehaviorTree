@@ -18,14 +18,14 @@ public abstract class Node : INode, IObserver<NodeState>
     /// <summary>
     /// 直近のcompositノード。なければnull
     /// </summary>
-    private Node owner;
+    private INode owner;
 
     protected IDisposable nodeDisposable;
 
     /// <summary>
     /// 接続された子ノード
     /// </summary>
-    protected Node childNode;
+    protected INode childNode;
 
     /// <summary>
     /// 実行後の成功可否
@@ -36,13 +36,8 @@ public abstract class Node : INode, IObserver<NodeState>
     ///  ノードID
     /// </summary>
     private NodeId id;
-    public NodeId Id
-    {
-        get
-        {
-            Debug.Assert(id != 0, "this node has no id. you must be use Node.CreateNode when you create Node");
-            return this.id;
-        }
+    public Int64 GetId() {
+        return this.id;
     }
 
     /// <summary>
@@ -75,7 +70,6 @@ public abstract class Node : INode, IObserver<NodeState>
     public virtual void Init(Int64 id)
     {
         this.id = id;
-        childNode = null;
         SetNodeState(NodeState.Init);
     }
 
@@ -84,22 +78,22 @@ public abstract class Node : INode, IObserver<NodeState>
         SetNodeState(NodeState.Start);
     }
 
-    public virtual Node GetChildNode()
+    public virtual INode GetChildNode()
     {
         return childNode;
     }
 
-    public virtual void SetOwner(Node owner)
+    public virtual void SetOwner(INode owner)
     {
         this.owner = owner;
     }
 
-    public virtual Node GetOwner()
+    public virtual INode GetOwner()
     {
         return owner;
     }
 
-    public bool HasChild()
+    public virtual bool HasChild()
     {
         return childNode != null;
     }
@@ -169,6 +163,9 @@ public abstract class Node : INode, IObserver<NodeState>
     public virtual void Activate()
     {
         SetNodeState(NodeState.Init);
+        if (childNode != null) {
+            childNode.Activate();
+        }
     }
 
     public virtual void Deactivate()
@@ -179,6 +176,6 @@ public abstract class Node : INode, IObserver<NodeState>
         }
     }
 
-    public abstract void AddNode(Node node);
+    public abstract void AddNode(INode node);
     public abstract bool IsRoot();
 }

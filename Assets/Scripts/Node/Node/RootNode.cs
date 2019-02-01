@@ -28,27 +28,27 @@ public class RootNode : Node, IObserver<NodeState>
         throw new System.NotImplementedException();
     }
 
-    public override void AddNode(Node node)
+    public override void AddNode(INode node)
     {
-        Debug.Assert(childNode == null, "ID: " + this.Id + " のノードにはすでに子ノードが追加されています");
+        Debug.Assert(childNode == null, "ID: " + GetId() + " のノードにはすでに子ノードが追加されています");
         childNode = node;
         childNode.SetOwner(this);
         this.nodeDisposable = childNode.Subscribe(this);
     }
 
-    public override Node GetChildNode()
+    public override INode GetChildNode()
     {
-        Debug.Assert(childNode != null, "ID: " + this.Id + " は子ノードを持っていません");
+        Debug.Assert(childNode != null, "ID: " + GetId() + " は子ノードを持っていません");
         return base.GetChildNode();
     }
 
-    public override Node GetOwner()
+    public override INode GetOwner()
     {
         Debug.Assert(false, "RootNodeはownerを持てません");
         return null;
     }
 
-    public override void SetOwner(Node owner)
+    public override void SetOwner(INode owner)
     {
         Debug.Assert(false, "RootNodeはownerを持てません");
     }

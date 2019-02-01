@@ -23,13 +23,13 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
 
     public void ExecuteAction() {
         if (this.action == null) {
-            Debug.Assert(false, "ノードID: " + this.Id + " is not assigned action");
+            Debug.Assert(false, "ノードID: " + GetId() + " is not assigned action");
             SetNodeState(NodeState.Disable);
             return;
         }
 
         if (this.nodeObservable == null) {
-            Debug.Assert(false, "ノードID: " + this.Id + " has null nodeObservable");
+            Debug.Assert(false, "ノードID: " + GetId() + " has null nodeObservable");
             SetNodeState(NodeState.Disable);
             return;
         }
@@ -40,7 +40,6 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
 
     public override void Activate()
     {
-        Debug.Log("ActionNode Activate");
         base.Activate();
     }
 
@@ -60,25 +59,25 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
         throw new System.NotImplementedException();
     }
 
-    public override void AddNode(Node node)
+    public override void AddNode(INode node)
     {
-        Debug.Assert(false, "ID: " + this.Id + " にはノードを追加することはできません");
+        Debug.Assert(false, "ID: " + GetId() + " にはノードを追加することはできません");
     }
 
     void IObserver<ActionState>.OnCompleted()
     {
         Debug.Log("ActionNode OnCompleted");
         executeResult = new ExecuteResult(ExecuteResultState.Success);
-        nodeObservable.SendComplete();
         SetNodeState(NodeState.Complete);
+        nodeObservable.SendComplete();
     }
 
     void IObserver<ActionState>.OnError(Exception error)
     {
         Debug.Log("ActionNode OnError: " + error.Message);
         executeResult = new ExecuteResult(ExecuteResultState.Failure);
-        nodeObservable.SendError(error);
         SetNodeState(NodeState.Complete);
+        nodeObservable.SendError(error);
     }
 
     void IObserver<ActionState>.OnNext(ActionState value)
