@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class BehaviorTree {
     Node rootNode;
+    NodeFactory factory;
 
     public void Prepare ()
     {
-        CreateTestNode();
+        CreateTestNode3();
     }
 	
 	public void Awake () 
@@ -22,23 +23,16 @@ public class BehaviorTree {
             {
                 nodeQueue.Enqueue(node.GetChildNode());
             }
-            //foreach (var childNode in node.GetChildNodeList()) {
-            //    if (childNode == null) {
-            //        continue;
-            //    }
-
-            //    nodeQueue.Enqueue(childNode);
-            //}
         }
 	}
 
     public IEnumerator Update() 
     {
         int count = 0;
-        Node currentNode = rootNode;
+        INode currentNode = rootNode;
         while (currentNode != null) {
             var nodeState = currentNode.GetNodeState();
-            if (count > 1000) {
+            if (count > 10000) {
                 Debug.Log("無限ループ??");
                 yield break;
             }
@@ -87,13 +81,57 @@ public class BehaviorTree {
         }
     }
 
-    private void CreateTestNode()
+    private void CreateTestNode1()
     {
-        NodeFactory factory = new NodeFactory();
+        factory = new NodeFactory();
         rootNode = factory.CreateNode(NodeType.Root);
         var actionNode = (ActionNode)factory.CreateNode(NodeType.Action);
         var sampleAction = new SampleAction();
         actionNode.Action = sampleAction;
         rootNode.AddNode(actionNode);
+    }
+
+    private void CreateTestNode2()
+    {
+        factory = new NodeFactory();
+        rootNode = factory.CreateNode(NodeType.Root);
+
+        var sequencerNode = (SequencerNode)factory.CreateNode(NodeType.Sequencer);
+        var actionNode1 = CreateSampleActionNode1();
+        var actionNode2 = CreateSampleActionNode1();
+        var actionNode3 = CreateSampleActionNode1();
+        sequencerNode.AddNode(actionNode1);
+        sequencerNode.AddNode(actionNode2);
+        sequencerNode.AddNode(actionNode3);
+        rootNode.AddNode(sequencerNode);
+    }
+
+    private void CreateTestNode3()
+    {
+        factory = new NodeFactory();
+        rootNode = factory.CreateNode(NodeType.Root);
+
+        var selectorNode = (SelectorNode)factory.CreateNode(NodeType.Selector);
+        var actionNode1 = CreateSampleActionNode1();
+        var actionNode2 = CreateSampleActionNode2();
+        selectorNode.AddNode(actionNode1, 1);
+        selectorNode.AddNode(actionNode2, 100);
+        rootNode.AddNode(selectorNode);
+    }
+
+    private ActionNode CreateSampleActionNode1()
+    {
+        var actionNode = (ActionNode)factory.CreateNode(NodeType.Action);
+        var sampleAction = new SampleAction();
+        actionNode.Action = sampleAction;
+        return actionNode;
+    }
+
+    private ActionNode CreateSampleActionNode2()
+    {
+        var actionNode = (ActionNode)factory.CreateNode(NodeType.Action);
+        var sampleAction = new SampleAction2();
+        actionNode.Action = sampleAction;
+        return actionNode;
     }
 }
