@@ -100,24 +100,18 @@ public abstract class Node : INode, IObserver<NodeState>
 
     public virtual void OnCompleted()
     {
-        Debug.Log("Node OnCompleted");
         SetNodeState(NodeState.Complete);
         executeResult = new ExecuteResult(ExecuteResultState.Success);
-        if (nodeObservable != null)
-        {
-            nodeObservable.SendComplete();
-        }
+        Debug.Assert(nodeObservable != null, "nodeObservableがnullです");
+        nodeObservable?.SendComplete();
     }
 
     public virtual void OnError(Exception error)
     {
-        Debug.Log("Node OnError: " + error.Message);
         SetNodeState(NodeState.Complete);
         executeResult = new ExecuteResult(ExecuteResultState.Failure);
-        if (nodeObservable != null)
-        {
-            nodeObservable.SendError(error);
-        }
+        Debug.Assert(nodeObservable != null, "ID: "+ GetId() +" type: "+ nodeType +" のnodeObservableがnullです");
+        nodeObservable?.SendError(error);
     }
 
     public virtual void OnNext(NodeState value)

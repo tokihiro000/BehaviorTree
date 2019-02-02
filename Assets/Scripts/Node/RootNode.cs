@@ -53,8 +53,20 @@ public class RootNode : Node, IObserver<NodeState>
         Debug.Assert(false, "RootNodeはownerを持てません");
     }
 
-    public override bool IsRoot()
+    public sealed override bool IsRoot()
     {
         return true;
+    }
+
+    public sealed override void OnCompleted()
+    {
+        SetNodeState(NodeState.Complete);
+        executeResult = new ExecuteResult(ExecuteResultState.Success);
+    }
+
+    public sealed override void OnError(Exception error)
+    {
+        SetNodeState(NodeState.Complete);
+        executeResult = new ExecuteResult(ExecuteResultState.Failure);
     }
 }
