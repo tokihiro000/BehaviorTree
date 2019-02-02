@@ -127,7 +127,7 @@ public class SelectorNode : Node, IObserver<NodeState>, ICompositeNode
         return childNodeList;
     }
 
-    public bool IsChildComplete()
+    public virtual bool IsChildComplete()
     {
         foreach (INode node in childNodeList)
         {

@@ -8,7 +8,7 @@ public class BehaviorTree {
 
     public void Prepare ()
     {
-        CreateTestNode3();
+        CreateTestNode4();
     }
 	
 	public void Awake () 
@@ -84,19 +84,20 @@ public class BehaviorTree {
     private void CreateTestNode1()
     {
         factory = new NodeFactory();
-        rootNode = factory.CreateNode(NodeType.Root);
-        var actionNode = (ActionNode)factory.CreateNode(NodeType.Action);
+        rootNode = factory.Create(NodeType.Root);
+        var actionNode = (ActionNode)factory.Create(NodeType.Action);
         var sampleAction = new SampleAction();
         actionNode.Action = sampleAction;
         rootNode.AddNode(actionNode);
     }
 
+    // sequencer
     private void CreateTestNode2()
     {
         factory = new NodeFactory();
-        rootNode = factory.CreateNode(NodeType.Root);
+        rootNode = factory.Create(NodeType.Root);
 
-        var sequencerNode = (SequencerNode)factory.CreateNode(NodeType.Sequencer);
+        var sequencerNode = (SequencerNode)factory.Create(NodeType.Sequencer);
         var actionNode1 = CreateSampleActionNode1();
         var actionNode2 = CreateSampleActionNode1();
         var actionNode3 = CreateSampleActionNode1();
@@ -106,12 +107,13 @@ public class BehaviorTree {
         rootNode.AddNode(sequencerNode);
     }
 
+    // selector
     private void CreateTestNode3()
     {
         factory = new NodeFactory();
-        rootNode = factory.CreateNode(NodeType.Root);
+        rootNode = factory.Create(NodeType.Root);
 
-        var selectorNode = (SelectorNode)factory.CreateNode(NodeType.Selector);
+        var selectorNode = (SelectorNode)factory.Create(NodeType.Selector);
         var actionNode1 = CreateSampleActionNode1();
         var actionNode2 = CreateSampleActionNode2();
         selectorNode.AddNode(actionNode1, 1);
@@ -119,9 +121,26 @@ public class BehaviorTree {
         rootNode.AddNode(selectorNode);
     }
 
+    // Decorate 失敗 
+    private void CreateTestNode4()
+    {
+        factory = new NodeFactory();
+        rootNode = factory.Create(NodeType.Root);
+
+        var selectorNode = (SelectorNode)factory.Create(NodeType.Selector);
+        var actionNode1 = CreateSampleActionNode1();
+        selectorNode.AddNode(actionNode1, 1);
+        var decoratorNode = (DecoratorNode)factory.Create(NodeType.Decorator);
+        var decorator = new NotDecorator();
+        decoratorNode.SetDecoratable(decorator);
+        var actionNode2 = CreateSampleActionNode2();
+        decoratorNode.AddNode(actionNode2);
+        selectorNode.AddNode(decoratorNode, 100);
+        rootNode.AddNode(selectorNode);
+    }
     private ActionNode CreateSampleActionNode1()
     {
-        var actionNode = (ActionNode)factory.CreateNode(NodeType.Action);
+        var actionNode = (ActionNode)factory.Create(NodeType.Action);
         var sampleAction = new SampleAction();
         actionNode.Action = sampleAction;
         return actionNode;
@@ -129,7 +148,7 @@ public class BehaviorTree {
 
     private ActionNode CreateSampleActionNode2()
     {
-        var actionNode = (ActionNode)factory.CreateNode(NodeType.Action);
+        var actionNode = (ActionNode)factory.Create(NodeType.Action);
         var sampleAction = new SampleAction2();
         actionNode.Action = sampleAction;
         return actionNode;

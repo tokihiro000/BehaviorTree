@@ -122,7 +122,7 @@ public class SequencerNode : Node, IObserver<NodeState>, ICompositeNode
         return childNodeList;
     }
 
-    public bool IsChildComplete()
+    public virtual bool IsChildComplete()
     {
         foreach (INode node in childNodeList)
         {

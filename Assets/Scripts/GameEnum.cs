@@ -14,7 +14,9 @@ public enum NodeType
     Root,
     Selector,
     Sequencer,
-    Action
+    Action,
+    Decorator,
+    Condition
 }
 
 public enum ActionState
