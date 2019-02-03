@@ -38,7 +38,7 @@ public class NodeFactory : IFactory<Node, NodeType>
         if (node != null)
         {
             node.Init(idSeed);
-            RegisterNode(idSeed, node);
+            Register(idSeed, node);
             idSeed += 1;
         }
 
@@ -50,7 +50,7 @@ public class NodeFactory : IFactory<Node, NodeType>
         return nodeDict.ContainsKey(id);
     }
 
-    private void RegisterNode(Int64 id, Node node)
+    public void Register(Int64 id, Node node)
     {
         Debug.Assert(!nodeDict.ContainsKey(id), "NodeId: " + id + " のノードはすでに登録されています");
         nodeDict.Add(id, node);

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class SampleAction2 : AbstractAction
+public class SampleAction2 : Action
 {
     public override void Invoke()
     {
