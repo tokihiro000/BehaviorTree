@@ -37,13 +37,13 @@ public class DecoratorFactory : IFactory<Decorator, DecoratorType>
 
     public bool Validate(Int64 id, Decorator decorator)
     {
-        Debug.Assert(decoratorDict.ContainsKey(id), "指定したノードがDecoratorFactoryに登録されていません");
+        Debug.Assert(decoratorDict.ContainsKey(id), "指定したdecoratorがDecoratorFactoryに登録されていません");
         return decoratorDict.ContainsKey(id);
     }
 
     public void Register(Int64 id, Decorator decorator)
     {
-        Debug.Assert(!decoratorDict.ContainsKey(id), "decoratorId: " + id + " のノードはすでに登録されています");
+        Debug.Assert(!decoratorDict.ContainsKey(id), "decoratorId: " + id + " のdecoratorはすでに登録されています");
         decoratorDict.Add(id, decorator);
     }
 }

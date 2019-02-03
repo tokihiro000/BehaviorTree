@@ -24,7 +24,7 @@ public class ActionFactory : IFactory<Action, ActionType>
                 action = new SampleAction2();
                 break;
             default:
-                Debug.Assert(false, "未定義のデコレータータイプ");
+                Debug.Assert(false, "未定義のActionタイプ");
                 break;
         }
 
@@ -40,13 +40,13 @@ public class ActionFactory : IFactory<Action, ActionType>
 
     public bool Validate(Int64 id, Action action)
     {
-        Debug.Assert(actionDict.ContainsKey(id), "指定したノードがActionFactoryに登録されていません");
+        Debug.Assert(actionDict.ContainsKey(id), "指定したActionがActionFactoryに登録されていません");
         return actionDict.ContainsKey(id);
     }
 
     public void Register(Int64 id, Action action)
     {
-        Debug.Assert(!actionDict.ContainsKey(id), "actionId: " + id + " のノードはすでに登録されています");
+        Debug.Assert(!actionDict.ContainsKey(id), "actionId: " + id + " のActionはすでに登録されています");
         actionDict.Add(id, action);
     }
 }
