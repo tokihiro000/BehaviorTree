@@ -33,3 +33,24 @@ public enum ExecuteResultState
     Success,
     Failure
 }
+
+public enum DecoratorType
+{
+    Not,
+    True,
+    False
+}
+
+
+public enum ActionType
+{
+    Sample1,
+    Sample2
+}
+
+public enum FactoryType
+{
+    Node,
+    Action,
+    Decorator
+}

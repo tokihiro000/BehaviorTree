@@ -4,5 +4,6 @@ public interface IFactory<T, U>
     where U : struct
 {
     T Create(U type);
-    bool Validate(Int64 id, T node);
+    bool Validate(Int64 id, T target);
+    void Register(Int64 id, T target);
 }

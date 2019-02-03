@@ -1,7 +1,10 @@
 ﻿using System;
 
-public class NotDecorator : AbstractDecorator
+public class NotDecorator : Decorator
 {
+    internal protected NotDecorator(DecoratorType type) : base(type) {
+    }
+
     protected sealed override Func<ExecuteResult, ExecuteResult> MakeDecoraterFunc1()
     {
         return ((ExecuteResult r) => {

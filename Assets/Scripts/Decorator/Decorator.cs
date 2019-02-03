@@ -1,12 +1,29 @@
 ﻿using System;
 using UnityEngine;
 
-public abstract class AbstractDecorator : IDecoratable
+public abstract class Decorator : IDecoratable
 {
     INode targetChild, targetOwner;
     private Func<ExecuteResult, ExecuteResult> evalFunc1;
     private Func<ExecuteResult, INode, ExecuteResult> evalFunc2;
     private Func<ExecuteResult, INode, INode, ExecuteResult> evalFunc3;
+    private DecoratorType decoratorType;
+    private Int64 id;
+
+    protected Decorator(DecoratorType type)
+    {
+        this.decoratorType = type;
+    }
+
+    public void Init(Int64 decoratorId)
+    {
+        this.id = decoratorId;
+    }
+
+    public Int64 GetId()
+    {
+        return this.id;
+    }
 
     public void MakeDecorater(INode child = null, INode owner = null)
     {
@@ -36,6 +53,11 @@ public abstract class AbstractDecorator : IDecoratable
             Debug.Assert(false, "Decoratorのコールバックが全てnullです");
             return new ExecuteResult(ExecuteResultState.Failure);
         }
+    }
+
+    public DecoratorType GetDecoratorType()
+    {
+        return this.decoratorType;
     }
 
     protected abstract Func<ExecuteResult, ExecuteResult> MakeDecoraterFunc1();

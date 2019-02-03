@@ -1,13 +1,19 @@
 ﻿using System;
 using System.Collections;
 
-public abstract class AbstractAction : IActionable {
+public abstract class Action : IActionable {
     protected ActionObservable observable;
-    public IDisposable ActionDisposer
+    public IDisposable ActionDisposer => observable.disposer;
+    private Int64 actionId;
+
+    public void Init(Int64 id)
     {
-        get {
-            return observable.disposer;
-        }
+        this.actionId = id;
+    }
+
+    public Int64 GetId()
+    {
+        return this.actionId;
     }
 
     public IDisposable Subscribe(IObserver<ActionState> observer) {
