@@ -23,8 +23,9 @@ public class SequencerNode : Node, IObserver<NodeState>, ICompositeNode
     /// コンストラクタ
     /// </summary>
     /// <param name="type">Type.</param>
-    internal SequencerNode(NodeType type) : base(type) {
-        childNodeList = new List<INode> ();
+    internal SequencerNode(NodeType type) : base(type)
+    {
+        childNodeList = new List<INode>();
         childNodeDisposerList = new Dictionary<Int64, IDisposable>();
         childNodePriorityDict = new Dictionary<Int64, int>();
     }
@@ -35,7 +36,8 @@ public class SequencerNode : Node, IObserver<NodeState>, ICompositeNode
           (a, b) => (childNodePriorityDict[b.GetId()] - childNodePriorityDict[a.GetId()])
         );
 
-        foreach (INode node in childNodeList) {
+        foreach (INode node in childNodeList)
+        {
             node.Activate();
         }
 
@@ -49,7 +51,7 @@ public class SequencerNode : Node, IObserver<NodeState>, ICompositeNode
 
     public override void Run()
     {
-        SetNodeState(IsChildComplete() ? NodeState.Complete : NodeState.WaitForChild); 
+        SetNodeState(IsChildComplete() ? NodeState.Complete : NodeState.WaitForChild);
     }
 
     public override void Deactivate()
@@ -79,10 +81,13 @@ public class SequencerNode : Node, IObserver<NodeState>, ICompositeNode
     public override INode GetChildNode()
     {
         Debug.Assert(childNodeList.Count != 0, "ID: " + GetId() + " は子ノードを持っていません");
-        foreach (INode node in childNodeList) {
+        foreach (INode node in childNodeList)
+        {
             NodeState nodeState = node.GetNodeState();
-            if (nodeState == NodeState.Init) {
-                return node;
+            if (nodeState == NodeState.Init)
+            {
+                childNode = node;
+                return childNode;
             }
         }
 
@@ -102,18 +107,28 @@ public class SequencerNode : Node, IObserver<NodeState>, ICompositeNode
 
     public override void OnCompleted()
     {
-        // 子ノード全てが完了した時のみ完了状態になる(子ノードが失敗した時はOnErrorの方に通知されてすぐFailureになる)
+        Debug.Assert(childNode != null, "childNodeがnullです");
+        Debug.Assert(nodeObservable != null, "nodeObservableがnullです");
+
+        // 失敗したら即失敗
+        var childResult = childNode.GetExecuteResultState();
+        if (ExecuteResultState.Failure == childResult.GetExecuteResult())
+        {
+            SetNodeState(NodeState.Complete);
+            executeResult = childResult;
+            nodeObservable?.SendComplete();
+            return;
+        }
+
+        // 子ノード全てが完了した時のみ完了状態になる
         if (!IsChildComplete())
         {
             return;
         }
 
         SetNodeState(NodeState.Complete);
-        executeResult = new ExecuteResult(ExecuteResultState.Success);
-        if (nodeObservable != null)
-        {
-            nodeObservable.SendComplete();
-        }
+        executeResult = childResult;
+        nodeObservable?.SendComplete();
         Debug.Log("SequncerNode OnCompleted");
     }
 

@@ -57,13 +57,14 @@ public class DecoratorNode : Node, IObserver<NodeState>, IDecoratorNode
     public override void OnCompleted()
     {
         Debug.Log("DecoratorNode OnCompleted");
-        SendResult(ExecuteResultState.Success);
+        Debug.Assert(childNode != null, "childNodeがnull");
+        SendResult(childNode.GetExecuteResultState());
     }
 
     public override void OnError(Exception error)
     {
         Debug.Log("DecoratorNode OnError: " + error.Message);
-        SendResult(ExecuteResultState.Failure, error);
+        base.OnError(error);
     }
 
     public virtual ExecuteResult Decorate(ExecuteResult result)
@@ -76,23 +77,12 @@ public class DecoratorNode : Node, IObserver<NodeState>, IDecoratorNode
         return new ExecuteResult(result.GetExecuteResult());
     }
 
-    private void SendResult(ExecuteResultState state, Exception error = null)
+    private void SendResult(ExecuteResult result, Exception error = null)
     {
         SetNodeState(NodeState.Complete);
         Debug.Assert(nodeObservable != null, "nodeObservableがnullです");
 
-        executeResult = Decorate(new ExecuteResult(state));
-        var resultState = executeResult.GetExecuteResult();
-        switch (resultState) {
-            case ExecuteResultState.Success:
-                nodeObservable?.SendComplete();
-                break;
-            case ExecuteResultState.Failure:
-                nodeObservable?.SendError(error);
-                break;
-            default:
-                Debug.Assert(false, "DecratorNodeの結果が未定義です");
-                break;
-        }
+        executeResult = Decorate(result);
+        nodeObservable?.SendComplete();
     }
 }

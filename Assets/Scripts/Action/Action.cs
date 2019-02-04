@@ -2,15 +2,16 @@
 using System.Collections;
 
 public abstract class Action : IActionable {
-    protected ActionObservable observable;
     public IDisposable ActionDisposer => observable.disposer;
+    protected ActionObservable observable;
+    protected ActionResult actionResult;
     private Int64 actionId;
     private ActionType actionType;
-    private Int64 id;
 
     protected Action(ActionType type)
     {
         this.actionType = type;
+        this.actionResult = new ActionResult(ActionResultState.None);
     }
 
     public void Init(Int64 id)
@@ -29,4 +30,8 @@ public abstract class Action : IActionable {
     }
 
     public abstract void Invoke();
+    public ActionResult GetResult()
+    {
+        return this.actionResult;
+    }
 }

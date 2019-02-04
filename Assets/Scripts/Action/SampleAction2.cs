@@ -19,6 +19,7 @@ public class SampleAction2 : Action
         Debug.Log("5");
         yield return new WaitForSeconds(1.0f);
         Debug.Log("6");
+        actionResult = new ActionResult(ActionResultState.Success);
         observable.SendComplete();
     }
 }

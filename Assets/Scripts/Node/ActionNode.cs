@@ -69,16 +69,34 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
     void IObserver<ActionState>.OnCompleted()
     {
         Debug.Log("ActionNode OnCompleted");
-        executeResult = new ExecuteResult(ExecuteResultState.Success);
         SetNodeState(NodeState.Complete);
-        nodeObservable.SendComplete();
+
+        var actionResult = action.GetResult();
+        switch (actionResult?.GetExecuteResult()) {
+            case ActionResultState.Success:
+                executeResult = new ExecuteResult(ExecuteResultState.Success);
+                break;
+            case ActionResultState.Failure:
+                executeResult = new ExecuteResult(ExecuteResultState.Failure);
+                break;
+            case ActionResultState.None:
+            default:
+                Debug.Assert(false, "ActionResultが未定義の値です");
+                break;
+        }
+
+        Debug.Assert(nodeObservable != null, "nodeObservableがnullです");
+        nodeObservable?.SendComplete();
     }
 
     void IObserver<ActionState>.OnError(Exception error)
     {
         Debug.Log("ActionNode OnError: " + error.Message);
-        executeResult = new ExecuteResult(ExecuteResultState.Failure);
         SetNodeState(NodeState.Complete);
+
+        executeResult = new ExecuteResult(ExecuteResultState.Error);
+
+        Debug.Assert(nodeObservable != null, "nodeObservableがnullです");
         nodeObservable.SendError(error);
     }
 
