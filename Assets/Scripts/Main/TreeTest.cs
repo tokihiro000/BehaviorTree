@@ -9,11 +9,6 @@ public class TreeTest : MonoBehaviour {
         BehaviorTree tree = new BehaviorTree();
         tree.Prepare();
         tree.Awake();
-        CoroutineHandler.StartStaticCoroutine(tree.Update());
+        StartCoroutine(tree.Update());
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

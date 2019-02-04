@@ -33,11 +33,13 @@ public class ConditionNode : Node, IObserver<NodeState>, IConditionNode
         Debug.Assert(this.Condition != null, "Condition が nullです");
         if (this.Condition.OnScheduleCheck()) {
             Debug.Log("Condition Node: true");
-            this.OnCompleted();
+            executeResult = new ExecuteResult(ExecuteResultState.Success);
         } else {
             Debug.Log("Condition Node: false");
-            OnError(new Exception());
+            executeResult = new ExecuteResult(ExecuteResultState.Failure);
         }
+
+        this.OnCompleted();
     }
 
     public override void Deactivate()
@@ -61,12 +63,14 @@ public class ConditionNode : Node, IObserver<NodeState>, IConditionNode
     public override void OnCompleted()
     {
         Debug.Log("ConditionNode OnCompleted");
-        base.OnCompleted();
+        SetNodeState(NodeState.Complete);
+        nodeObservable?.SendComplete();
     }
 
     public override void OnError(Exception error)
     {
         Debug.Log("ConditionNode OnError: " + error.Message);
-        base.OnError(error);
+        SetNodeState(NodeState.Complete);
+        nodeObservable?.SendError(error);
     }
 }

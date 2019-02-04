@@ -87,7 +87,8 @@ public class SelectorNode : Node, IObserver<NodeState>, ICompositeNode
             NodeState nodeState = node.GetNodeState();
             if (nodeState == NodeState.Init)
             {
-                return node;
+                childNode = node;
+                return childNode;
             }
         }
 
@@ -107,19 +108,21 @@ public class SelectorNode : Node, IObserver<NodeState>, ICompositeNode
 
     public override void OnCompleted()
     {
-        // 子ノードのどれかが完了した時のみ完了状態になる(子ノードが失敗した時はOnErrorの方に通知されてすぐFailureになる)
+        // 子ノードのどれかが完了した時のみ完了状態になる
         if (!IsChildComplete())
         {
             return;
         }
 
-        SetNodeState(NodeState.Complete);
-        executeResult = new ExecuteResult(ExecuteResultState.Success);
-        if (nodeObservable != null)
-        {
-            nodeObservable.SendComplete();
-        }
+        Debug.Assert(childNode != null, "childNodeがnullです");
+        Debug.Assert(childNode.GetNodeState() == NodeState.Complete, "なんか完了してない子供がアサインされている");
+        Debug.Assert(nodeObservable != null, "nodeObservableがnullです");
+
         Debug.Log("SelectorNode OnCompleted");
+        SetNodeState(NodeState.Complete);
+        executeResult = childNode.GetExecuteResultState();
+        nodeObservable?.SendComplete();
+
     }
 
     public virtual List<INode> GetChildNodeList()

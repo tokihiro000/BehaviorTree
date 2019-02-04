@@ -7,7 +7,7 @@ public class BehaviorTree {
 
     public void Prepare ()
     {
-        CreateTestNode5();
+        CreateTestNode4();
     }
 	
 	public void Awake () 

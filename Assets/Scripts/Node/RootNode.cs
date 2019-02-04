@@ -61,12 +61,12 @@ public class RootNode : Node, IObserver<NodeState>
     public sealed override void OnCompleted()
     {
         SetNodeState(NodeState.Complete);
-        executeResult = new ExecuteResult(ExecuteResultState.Success);
+        executeResult = childNode.GetExecuteResultState();
     }
 
     public sealed override void OnError(Exception error)
     {
         SetNodeState(NodeState.Complete);
-        executeResult = new ExecuteResult(ExecuteResultState.Failure);
+        executeResult = new ExecuteResult(ExecuteResultState.Error);
     }
 }

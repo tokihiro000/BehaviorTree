@@ -9,4 +9,5 @@ public interface IActionable {
     Int64 GetId();
     IDisposable Subscribe(IObserver<ActionState> observer);
     void Invoke();
+    ActionResult GetResult();
 }

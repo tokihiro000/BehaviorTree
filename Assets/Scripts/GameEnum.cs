@@ -31,6 +31,14 @@ public enum ExecuteResultState
 {
     None,
     Success,
+    Failure,
+    Error
+}
+
+public enum ActionResultState
+{
+    None,
+    Success,
     Failure
 }
 

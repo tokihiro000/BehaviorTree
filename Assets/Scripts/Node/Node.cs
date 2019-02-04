@@ -101,7 +101,10 @@ public abstract class Node : INode, IObserver<NodeState>
     public virtual void OnCompleted()
     {
         SetNodeState(NodeState.Complete);
-        executeResult = new ExecuteResult(ExecuteResultState.Success);
+
+        Debug.Assert(childNode != null, "childNode がnullです");
+        executeResult = childNode.GetExecuteResultState();
+
         Debug.Assert(nodeObservable != null, "nodeObservableがnullです");
         nodeObservable?.SendComplete();
     }
@@ -109,7 +112,7 @@ public abstract class Node : INode, IObserver<NodeState>
     public virtual void OnError(Exception error)
     {
         SetNodeState(NodeState.Complete);
-        executeResult = new ExecuteResult(ExecuteResultState.Failure);
+        executeResult = new ExecuteResult(ExecuteResultState.Error);
         Debug.Assert(nodeObservable != null, "ID: "+ GetId() +" type: "+ nodeType +" のnodeObservableがnullです");
         nodeObservable?.SendError(error);
     }
