@@ -7,6 +7,7 @@ public sealed class FactoryManager : Manager<FactoryManager>
     private static readonly NodeFactory nodeFactory = new NodeFactory();
     private static readonly ActionFactory actionFactory = new ActionFactory();
     private static readonly DecoratorFactory decoratorFactory = new DecoratorFactory();
+    private static readonly ConditionFactory conditionFactory = new ConditionFactory();
 
     public FactoryManager()
     {
@@ -23,6 +24,9 @@ public sealed class FactoryManager : Manager<FactoryManager>
                 return (IFactory<T, U>) actionFactory;
             case FactoryType.Decorator:
                 return (IFactory<T, U>) decoratorFactory;
+            case FactoryType.Condition:
+                return (IFactory<T, U>) conditionFactory;
+
             default:
                 Debug.Assert(false, "未定義のファクトリーです");
                 break;

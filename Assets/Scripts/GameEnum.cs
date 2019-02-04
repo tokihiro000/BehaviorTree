@@ -41,16 +41,21 @@ public enum DecoratorType
     False
 }
 
-
 public enum ActionType
 {
     Sample1,
     Sample2
 }
 
+public enum ConditionType
+{
+    Sample1
+}
+
 public enum FactoryType
 {
     Node,
     Action,
-    Decorator
+    Decorator,
+    Condition
 }

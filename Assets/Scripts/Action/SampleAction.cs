@@ -3,6 +3,10 @@ using UnityEngine;
 
 public class SampleAction : Action
 {
+    internal protected SampleAction(ActionType type) : base(type)
+    {
+    }
+
     public override void Invoke()
     {
         CoroutineHandler.StartStaticCoroutine(DoSampleAction());
