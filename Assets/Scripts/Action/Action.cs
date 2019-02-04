@@ -5,6 +5,13 @@ public abstract class Action : IActionable {
     protected ActionObservable observable;
     public IDisposable ActionDisposer => observable.disposer;
     private Int64 actionId;
+    private ActionType actionType;
+    private Int64 id;
+
+    protected Action(ActionType type)
+    {
+        this.actionType = type;
+    }
 
     public void Init(Int64 id)
     {

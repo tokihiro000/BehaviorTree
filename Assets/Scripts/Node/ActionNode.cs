@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ActionNode : Node, IActionNode, IObserver<ActionState>
 {
     // コンストラクタ
-    internal ActionNode(NodeType type) : base(type) {}
+    internal ActionNode(NodeType type) : base(type) { }
 
     // 実行するアクション
     private IActionable action;
@@ -21,14 +20,17 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
         }
     }
 
-    public void ExecuteAction() {
-        if (this.action == null) {
+    public void ExecuteAction()
+    {
+        if (this.action == null)
+        {
             Debug.Assert(false, "ノードID: " + GetId() + " is not assigned action");
             SetNodeState(NodeState.Disable);
             return;
         }
 
-        if (this.nodeObservable == null) {
+        if (this.nodeObservable == null)
+        {
             Debug.Assert(false, "ノードID: " + GetId() + " has null nodeObservable");
             SetNodeState(NodeState.Disable);
             return;
@@ -82,7 +84,8 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
 
     void IObserver<ActionState>.OnNext(ActionState value)
     {
-        switch (value) {
+        switch (value)
+        {
             case ActionState.None:
                 break;
             case ActionState.Start:

@@ -30,6 +30,9 @@ public class NodeFactory : IFactory<Node, NodeType>
             case NodeType.Decorator:
                 node = new DecoratorNode(type);
                 break;
+            case NodeType.Condition:
+                node = new ConditionNode(type);
+                break;
             default:
                 Debug.Assert(false, "未定義のノードタイプ");
                 break;
