@@ -12,6 +12,13 @@ public class ConditionFactory : IFactory<Condition, ConditionType>
         conditionDict = new Dictionary<Int64, Condition>();
     }
 
+    public T Create<T>(ConditionType type)
+        where T : Condition
+    {
+        var c = (T)Create(type);
+        return c;
+    }
+
     public Condition Create(ConditionType type)
     {
         Condition condition = null;
@@ -19,6 +26,9 @@ public class ConditionFactory : IFactory<Condition, ConditionType>
         {
             case ConditionType.Sample1:
                 condition = new SampleCondition(type);
+                break;
+            case ConditionType.Repeat:
+                condition = new RepeatCondition(type);
                 break;
             default:
                 Debug.Assert(false, "未定義のコンディションタイプ");

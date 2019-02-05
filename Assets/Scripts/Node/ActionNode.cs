@@ -43,6 +43,7 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
     public override void Activate()
     {
         base.Activate();
+        this.action.Activate();
     }
 
     public override void StartProcess()

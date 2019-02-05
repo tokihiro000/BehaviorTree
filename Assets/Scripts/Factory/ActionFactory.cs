@@ -12,6 +12,13 @@ public class ActionFactory : IFactory<Action, ActionType>
         actionDict = new Dictionary<Int64, Action>();
     }
 
+    public T Create<T>(ActionType type)
+    where T : Action
+    {
+        var c = (T)Create(type);
+        return c;
+    }
+
     public Action Create(ActionType type)
     {
         Action action = null;

@@ -16,7 +16,8 @@ public enum NodeType
     Sequencer,
     Action,
     Decorator,
-    Condition
+    Condition,
+    ConditionWhile
 }
 
 public enum ActionState
@@ -57,7 +58,8 @@ public enum ActionType
 
 public enum ConditionType
 {
-    Sample1
+    Sample1,
+    Repeat
 }
 
 public enum FactoryType

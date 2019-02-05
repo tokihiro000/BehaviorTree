@@ -7,7 +7,7 @@ public class BehaviorTree {
 
     public void Prepare ()
     {
-        CreateTestNode4();
+        CreateTestNode7();
     }
 	
 	public void Awake () 
@@ -165,6 +165,40 @@ public class BehaviorTree {
         rootNode.AddNode(sequencerNode);
     }
 
+    private void CreateTestNode6()
+    {
+        var factory = FactoryManager.Instance.GetFactory<Node, NodeType>(FactoryType.Node);
+        rootNode = factory.Create(NodeType.Root);
+
+        var sequencerNode = (SequencerNode)factory.Create(NodeType.Sequencer);
+        var actionNode1 = CreateSampleActionNode1();
+        var actionNode2 = CreateSampleActionNode2();
+        var conditionFactory = FactoryManager.Instance.GetFactory<Condition, ConditionType>(FactoryType.Condition);
+        var conditionNode = (ConditionNode)factory.Create(NodeType.Condition);
+        var condition = conditionFactory.Create(ConditionType.Sample1);
+        conditionNode.Condition = condition;
+        conditionNode.AddNode(sequencerNode);
+        sequencerNode.AddNode(actionNode1);
+        sequencerNode.AddNode(actionNode2);
+        rootNode.AddNode(conditionNode);
+    }
+
+    private void CreateTestNode7()
+    {
+        NodeFactory factory = FactoryManager.Instance.GetFactory<Node, NodeType, NodeFactory>(FactoryType.Node);
+        ConditionFactory conditionFactory = FactoryManager.Instance.GetFactory<Condition, ConditionType, ConditionFactory>(FactoryType.Condition);
+
+        rootNode = factory.Create(NodeType.Root);
+        var sequencerNode = factory.Create<SequencerNode>(NodeType.Sequencer);
+        var actionNode1 = CreateSampleActionNode1();
+        var conditionNode = factory.Create<ConditionWhileNode>(NodeType.ConditionWhile);
+        var repeatCondition = conditionFactory.Create<RepeatCondition>(ConditionType.Repeat);
+        repeatCondition.LoopCount = 3;
+        conditionNode.Condition = repeatCondition;
+        conditionNode.AddNode(sequencerNode);
+        sequencerNode.AddNode(actionNode1);
+        rootNode.AddNode(conditionNode);
+    }
     private ActionNode CreateSampleActionNode1()
     {
         var factory = FactoryManager.Instance.GetFactory<Node, NodeType>(FactoryType.Node);

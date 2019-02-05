@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConditionNode : Node, IObserver<NodeState>, IConditionNode
+public class ConditionWhileNode : Node, IObserver<NodeState>, IConditionNode
 {
     public IConditionable Condition
     {
@@ -14,7 +14,7 @@ public class ConditionNode : Node, IObserver<NodeState>, IConditionNode
     /// コンストラクタ
     /// </summary>
     /// <param name="type">Type.</param>
-    internal ConditionNode(NodeType type) : base(type)
+    internal ConditionWhileNode(NodeType type) : base(type)
     {
     }
 
@@ -32,24 +32,17 @@ public class ConditionNode : Node, IObserver<NodeState>, IConditionNode
     public override void Run()
     {
         Debug.Assert(this.Condition != null, "Condition が nullです");
+        Debug.Assert(HasChild(), "ConditionWhileNodeには子が必要です");
+
         if (this.Condition.OnScheduleCheck())
         {
-            Debug.Log("Condition Node: true");
-            // 子がいるなら子へ遷移
-            if (HasChild())
-            {
-                SetNodeState(NodeState.WaitForChild);
-                return;
-            }
-
-            executeResult = new ExecuteResult(ExecuteResultState.Success);
-        }
-        else
-        {
-            Debug.Log("Condition Node: false");
-            executeResult = new ExecuteResult(ExecuteResultState.Failure);
+            Debug.Log("Condition While Node: true");
+            SetNodeState(NodeState.WaitForChild);
+            return;
         }
 
+        Debug.Log("Condition While Node: false");
+        executeResult = new ExecuteResult(ExecuteResultState.Failure);
         SetNodeState(NodeState.Complete);
         nodeObservable?.SendComplete();
     }
@@ -75,6 +68,17 @@ public class ConditionNode : Node, IObserver<NodeState>, IConditionNode
     public override void OnCompleted()
     {
         Debug.Log("ConditionNode OnCompleted");
+        if (this.Condition.OnScheduleCheck())
+        {
+            Debug.Log("Condition While Node: true @OnCompleted");
+            // 条件がtrueなので再びこの実行を始める
+            // Warning: this.ActivateだとConditionもリセットされるのでbase.Activate
+            base.Activate();
+            SetNodeState(NodeState.WaitForChild);
+            return;
+        }
+
+        Debug.Log("Condition While Node: false @OnCompleted");
         base.OnCompleted();
     }
 

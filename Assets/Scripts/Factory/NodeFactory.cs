@@ -11,6 +11,13 @@ public class NodeFactory : IFactory<Node, NodeType>
         nodeDict = new Dictionary<Int64, Node>();
     }
 
+    public T Create<T>(NodeType type)
+        where T : Node
+    {
+        var c = (T)Create(type);
+        return c;
+    }
+
     public Node Create(NodeType type) {
         Node node = null;
         switch (type)
@@ -32,6 +39,9 @@ public class NodeFactory : IFactory<Node, NodeType>
                 break;
             case NodeType.Condition:
                 node = new ConditionNode(type);
+                break;
+            case NodeType.ConditionWhile:
+                node = new ConditionWhileNode(type);
                 break;
             default:
                 Debug.Assert(false, "未定義のノードタイプ");

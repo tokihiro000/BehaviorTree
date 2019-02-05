@@ -16,6 +16,10 @@ public abstract class Condition : IConditionable
         this.conditionId = id;
     }
 
+    public virtual void Activate()
+    {
+    }
+
     public Int64 GetId()
     {
         return this.conditionId;
