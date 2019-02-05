@@ -9,10 +9,6 @@ public sealed class FactoryManager : Manager<FactoryManager>
     private static readonly DecoratorFactory decoratorFactory = new DecoratorFactory();
     private static readonly ConditionFactory conditionFactory = new ConditionFactory();
 
-    public FactoryManager()
-    {
-    }
-
     public X GetFactory<X> (FactoryType type)
     {
         switch (type)
