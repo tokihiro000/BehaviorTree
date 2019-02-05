@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SelectorNode : Node, IObserver<NodeState>, ICompositeNode
 {
+    public override NodeType NodeType => this.nodeType = NodeType.Selector;
+
     /// <summary>
     /// 子ノードのリスト
     /// </summary>
@@ -23,7 +25,7 @@ public class SelectorNode : Node, IObserver<NodeState>, ICompositeNode
     /// コンストラクタ
     /// </summary>
     /// <param name="type">Type.</param>
-    internal SelectorNode(NodeType type) : base(type)
+    internal SelectorNode() : base()
     {
         childNodeList = new List<INode>();
         childNodeDisposerDict = new Dictionary<Int64, IDisposable>();

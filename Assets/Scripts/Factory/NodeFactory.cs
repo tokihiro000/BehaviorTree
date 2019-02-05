@@ -23,25 +23,25 @@ public class NodeFactory : IFactory<Node, NodeType>
         switch (type)
         {
             case NodeType.Root:
-                node = new RootNode(type);
+                node = new RootNode();
                 break;
             case NodeType.Action:
-                node = new ActionNode(type);
+                node = new ActionNode();
                 break;
             case NodeType.Sequencer:
-                node = new SequencerNode(type);
+                node = new SequencerNode();
                 break;
             case NodeType.Selector:
-                node = new SelectorNode(type);
+                node = new SelectorNode();
                 break;
             case NodeType.Decorator:
-                node = new DecoratorNode(type);
+                node = new DecoratorNode();
                 break;
             case NodeType.Condition:
-                node = new ConditionNode(type);
+                node = new ConditionNode();
                 break;
             case NodeType.ConditionWhile:
-                node = new ConditionWhileNode(type);
+                node = new ConditionWhileNode();
                 break;
             default:
                 Debug.Assert(false, "未定義のノードタイプ");

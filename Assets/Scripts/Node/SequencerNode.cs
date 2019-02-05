@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SequencerNode : Node, IObserver<NodeState>, ICompositeNode
 {
+    public override NodeType NodeType => this.nodeType = NodeType.Sequencer;
+
     /// <summary>
     /// 子ノードのリスト
     /// </summary>
@@ -23,7 +25,7 @@ public class SequencerNode : Node, IObserver<NodeState>, ICompositeNode
     /// コンストラクタ
     /// </summary>
     /// <param name="type">Type.</param>
-    internal SequencerNode(NodeType type) : base(type)
+    internal SequencerNode() : base()
     {
         childNodeList = new List<INode>();
         childNodeDisposerList = new Dictionary<Int64, IDisposable>();

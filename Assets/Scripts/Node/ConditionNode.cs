@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ConditionNode : Node, IObserver<NodeState>, IConditionNode
 {
+    public override NodeType NodeType => this.nodeType = NodeType.Condition;
+
     public IConditionable Condition
     {
         get;
@@ -14,7 +16,7 @@ public class ConditionNode : Node, IObserver<NodeState>, IConditionNode
     /// コンストラクタ
     /// </summary>
     /// <param name="type">Type.</param>
-    internal ConditionNode(NodeType type) : base(type)
+    internal ConditionNode() : base()
     {
     }
 

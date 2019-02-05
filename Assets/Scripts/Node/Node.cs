@@ -5,10 +5,8 @@ using NodeId = System.Int64;
 
 public abstract class Node : INode, IObserver<NodeState>
 {
-    /// <summary>
-    /// ノードのタイプ
-    /// </summary>
-    private NodeType nodeType;
+    protected NodeType nodeType;
+    public virtual NodeType NodeType => this.nodeType = NodeType.None;
 
     /// <summary>
     /// ノードの状態
@@ -45,9 +43,8 @@ public abstract class Node : INode, IObserver<NodeState>
     /// </summary> 
     protected NodeObservable nodeObservable;
 
-    protected Node(NodeType type)
+    protected Node()
     {
-        this.nodeType = type;
         executeResult = new ExecuteResult(ExecuteResultState.None);
     }
 

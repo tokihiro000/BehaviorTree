@@ -3,8 +3,10 @@ using UnityEngine;
 
 public class ActionNode : Node, IActionNode, IObserver<ActionState>
 {
+    public override NodeType NodeType => this.nodeType = NodeType.Action;
+
     // コンストラクタ
-    internal ActionNode(NodeType type) : base(type) { }
+    internal ActionNode() : base() { }
 
     // 実行するアクション
     private IActionable action;
@@ -73,7 +75,8 @@ public class ActionNode : Node, IActionNode, IObserver<ActionState>
         SetNodeState(NodeState.Complete);
 
         var actionResult = action.GetResult();
-        switch (actionResult?.GetExecuteResult()) {
+        switch (actionResult?.GetExecuteResult())
+        {
             case ActionResultState.Success:
                 executeResult = new ExecuteResult(ExecuteResultState.Success);
                 break;

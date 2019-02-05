@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class DecoratorNode : Node, IObserver<NodeState>, IDecoratorNode
 {
-    private IDecoratable decoratable;
+    public override NodeType NodeType => this.nodeType = NodeType.Decorator;
 
+    private IDecoratable decoratable;
     public void SetDecoratable(IDecoratable decoratable)
     {
         this.decoratable = decoratable;
@@ -15,7 +16,7 @@ public class DecoratorNode : Node, IObserver<NodeState>, IDecoratorNode
     /// コンストラクタ
     /// </summary>
     /// <param name="type">Type.</param>
-    internal DecoratorNode(NodeType type) : base(type)
+    internal DecoratorNode() : base()
     {
     }
 
