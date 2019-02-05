@@ -13,6 +13,26 @@ public sealed class FactoryManager : Manager<FactoryManager>
     {
     }
 
+    public X GetFactory<X> (FactoryType type)
+    {
+        switch (type)
+        {
+            case FactoryType.Node:
+                return (X)GetFactory<Node, NodeType> (type);
+            case FactoryType.Action:
+                return (X)GetFactory<Action, ActionType> (type);
+            case FactoryType.Decorator:
+                return (X)GetFactory<Decorator, DecoratorType>(type);
+            case FactoryType.Condition:
+                return (X)GetFactory<Condition, ConditionType>(type);
+            default:
+                Debug.Assert(false, "未定義のファクトリーです");
+                break;
+        }
+
+        return default(X);
+    }
+
     public X GetFactory<T, U, X>(FactoryType type)
         where T : class
         where U : struct
@@ -36,12 +56,11 @@ public sealed class FactoryManager : Manager<FactoryManager>
                 return (IFactory<T, U>)decoratorFactory;
             case FactoryType.Condition:
                 return (IFactory<T, U>)conditionFactory;
-
             default:
                 Debug.Assert(false, "未定義のファクトリーです");
                 break;
         }
-
+        
         return null;
     }
 }

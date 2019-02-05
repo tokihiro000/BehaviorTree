@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class RootNode : Node, IObserver<NodeState>
 {
+    public override NodeType NodeType => this.nodeType = NodeType.Root;
+
     // コンストラクタ
-    internal RootNode(NodeType type) : base(type) {}
+    internal RootNode() : base() {}
 
     public override void Activate()
     {

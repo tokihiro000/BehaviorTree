@@ -11,6 +11,7 @@
 
 public enum NodeType
 {
+    None,
     Root,
     Selector,
     Sequencer,
