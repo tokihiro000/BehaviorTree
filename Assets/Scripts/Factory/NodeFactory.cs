@@ -14,7 +14,7 @@ public class NodeFactory : IFactory<Node, NodeType>
     public T Create<T>(NodeType type)
         where T : Node
     {
-        var c = (T)Create(type);
+        T c = (T)Create(type);
         return c;
     }
 

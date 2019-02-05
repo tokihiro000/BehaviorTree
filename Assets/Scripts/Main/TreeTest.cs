@@ -6,8 +6,9 @@ public class TreeTest : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+        INode rootNode = NodeCreator.Instance.CreateTestNode5();
         BehaviorTree tree = new BehaviorTree();
-        tree.Prepare();
+        tree.Prepare(rootNode);
         tree.Awake();
         StartCoroutine(tree.Update());
     }
