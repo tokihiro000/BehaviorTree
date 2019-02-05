@@ -25,6 +25,10 @@ public abstract class Decorator : IDecoratable
         return this.id;
     }
 
+    public virtual void Activate()
+    {
+    }
+
     public void MakeDecorater(INode child = null, INode owner = null)
     {
         this.targetChild = child;

@@ -24,6 +24,7 @@ public class DecoratorNode : Node, IObserver<NodeState>, IDecoratorNode
         Debug.Assert(decoratable != null, "decoratable がnullです @ DecoratorNode.Activate");
         decoratable?.MakeDecorater(GetChildNode(), GetOwner());
         base.Activate();
+        decoratable.Activate();
     }
 
     public override void StartProcess()

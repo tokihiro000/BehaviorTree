@@ -11,12 +11,16 @@ public abstract class Action : IActionable {
     protected Action(ActionType type)
     {
         this.actionType = type;
-        this.actionResult = new ActionResult(ActionResultState.None);
     }
 
     public void Init(Int64 id)
     {
         this.actionId = id;
+    }
+
+    public virtual void Activate()
+    {
+        this.actionResult = new ActionResult(ActionResultState.None);
     }
 
     public Int64 GetId()

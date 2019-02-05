@@ -12,6 +12,13 @@ public class DecoratorFactory : IFactory<Decorator, DecoratorType>
         decoratorDict = new Dictionary<Int64, Decorator>();
     }
 
+    public T Create<T>(DecoratorType type)
+        where T : Decorator
+    {
+        var c = (T)Create(type);
+        return c;
+    }
+
     public Decorator Create(DecoratorType type)
     {
         Decorator decorator = null;

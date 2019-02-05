@@ -21,6 +21,7 @@ public class ConditionNode : Node, IObserver<NodeState>, IConditionNode
     public override void Activate()
     {
         base.Activate();
+        Condition.Activate();
     }
 
     public override void StartProcess()
@@ -31,15 +32,26 @@ public class ConditionNode : Node, IObserver<NodeState>, IConditionNode
     public override void Run()
     {
         Debug.Assert(this.Condition != null, "Condition が nullです");
-        if (this.Condition.OnScheduleCheck()) {
+        if (this.Condition.OnScheduleCheck())
+        {
             Debug.Log("Condition Node: true");
+            // 子がいるなら子へ遷移
+            if (HasChild())
+            {
+                SetNodeState(NodeState.WaitForChild);
+                return;
+            }
+
             executeResult = new ExecuteResult(ExecuteResultState.Success);
-        } else {
+        }
+        else
+        {
             Debug.Log("Condition Node: false");
             executeResult = new ExecuteResult(ExecuteResultState.Failure);
         }
 
-        this.OnCompleted();
+        SetNodeState(NodeState.Complete);
+        nodeObservable?.SendComplete();
     }
 
     public override void Deactivate()
@@ -63,14 +75,12 @@ public class ConditionNode : Node, IObserver<NodeState>, IConditionNode
     public override void OnCompleted()
     {
         Debug.Log("ConditionNode OnCompleted");
-        SetNodeState(NodeState.Complete);
-        nodeObservable?.SendComplete();
+        base.OnCompleted();
     }
 
     public override void OnError(Exception error)
     {
         Debug.Log("ConditionNode OnError: " + error.Message);
-        SetNodeState(NodeState.Complete);
-        nodeObservable?.SendError(error);
+        base.OnError(error);
     }
 }
