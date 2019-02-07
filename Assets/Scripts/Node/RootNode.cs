@@ -7,7 +7,7 @@ public class RootNode : Node, IObserver<NodeState>
     public override NodeType NodeType => this.nodeType = NodeType.Root;
 
     // コンストラクタ
-    internal RootNode() : base() {}
+    protected internal RootNode() : base() {}
 
     public override void Activate()
     {

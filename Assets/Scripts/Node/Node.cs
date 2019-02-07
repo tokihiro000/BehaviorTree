@@ -43,7 +43,7 @@ public abstract class Node : INode, IObserver<NodeState>
     /// </summary> 
     protected NodeObservable nodeObservable;
 
-    protected Node()
+    protected internal Node()
     {
         executeResult = new ExecuteResult(ExecuteResultState.None);
     }

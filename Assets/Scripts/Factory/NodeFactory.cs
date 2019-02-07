@@ -34,6 +34,15 @@ public class NodeFactory : IFactory<Node, NodeType>
             case NodeType.Selector:
                 node = new SelectorNode();
                 break;
+            case NodeType.Random:
+                node = new RandomNode();
+                break;
+            case NodeType.RandomSelector:
+                node = new RandomSelectorNode();
+                break;
+            case NodeType.RandomSequencer:
+                node = new RandomSequencerNode();
+                break;
             case NodeType.Decorator:
                 node = new DecoratorNode();
                 break;
