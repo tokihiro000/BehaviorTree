@@ -25,13 +25,13 @@ public class DecoratorFactory : IFactory<Decorator, DecoratorType>
         switch (type)
         {
             case DecoratorType.Not:
-                decorator = new NotDecorator(type);
+                decorator = new NotDecorator();
                 break;
             case DecoratorType.False:
-                decorator = new FalseDecorator(type);
+                decorator = new FalseDecorator();
                 break;
             case DecoratorType.True:
-                decorator = new TrueDecorator(type);
+                decorator = new TrueDecorator();
                 break;
             default:
                 Debug.Assert(false, "未定義のデコレータータイプ");

@@ -2,7 +2,9 @@
 
 public class FalseDecorator : Decorator
 {
-    internal protected FalseDecorator(DecoratorType type) : base(type)
+    public sealed override DecoratorType DecoratorType => this.decoratorType = DecoratorType.False;
+
+    protected internal FalseDecorator() : base()
     {
     }
 

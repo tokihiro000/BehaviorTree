@@ -2,6 +2,9 @@
 
 public interface IDecoratable
 {
+    DecoratorType DecoratorType {
+        get;
+    }
     void Init(Int64 id);
     void Activate();
     Int64 GetId();

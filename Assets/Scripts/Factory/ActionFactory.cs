@@ -25,10 +25,10 @@ public class ActionFactory : IFactory<Action, ActionType>
         switch (type)
         {
             case ActionType.Sample1:
-                action = new SampleAction(type);
+                action = new SampleAction();
                 break;
             case ActionType.Sample2:
-                action = new SampleAction2(type);
+                action = new SampleAction2();
                 break;
             default:
                 Debug.Assert(false, "未定義のActionタイプ");

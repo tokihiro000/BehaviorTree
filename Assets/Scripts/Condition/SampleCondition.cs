@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 
 public class SampleCondition : Condition {
-    internal protected SampleCondition(ConditionType type) : base(type)
+    public override ConditionType ConditionType => this.conditionType = ConditionType.Sample1;
+
+    protected internal SampleCondition() : base()
     {
     }
 

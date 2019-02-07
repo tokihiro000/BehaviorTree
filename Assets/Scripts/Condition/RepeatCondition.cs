@@ -1,10 +1,12 @@
 ﻿public class RepeatCondition : Condition
 {
+    public override ConditionType ConditionType => this.conditionType = ConditionType.Repeat;
+
     public bool RepeatFlg { get; set; }
     public int LoopCount { get; set; }
     private int currentLoopCount;
 
-    internal protected RepeatCondition(ConditionType type) : base(type)
+    protected internal RepeatCondition() : base()
     {
         RepeatFlg = false;
         LoopCount = 0;
