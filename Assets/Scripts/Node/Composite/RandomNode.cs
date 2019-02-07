@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SelectorNode : Node, IObserver<NodeState>, ICompositeNode
+public class RandomNode : Node, IObserver<NodeState>, ICompositeNode
 {
-    public override NodeType NodeType => this.nodeType = NodeType.Selector;
+    public override NodeType NodeType => this.nodeType = NodeType.Random;
 
     /// <summary>
     /// 子ノードのリスト
@@ -24,8 +24,7 @@ public class SelectorNode : Node, IObserver<NodeState>, ICompositeNode
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    /// <param name="type">Type.</param>
-    internal SelectorNode() : base()
+    internal RandomNode() : base()
     {
         childNodeList = new List<INode>();
         childNodeDisposerDict = new Dictionary<Int64, IDisposable>();
@@ -34,10 +33,6 @@ public class SelectorNode : Node, IObserver<NodeState>, ICompositeNode
 
     public override void Activate()
     {
-        childNodeList.Sort(
-            (a, b) => (childNodePriorityDict[b.GetId()] - childNodePriorityDict[a.GetId()])
-        );
-
         foreach (INode node in childNodeList)
         {
             node.Activate();
@@ -53,7 +48,7 @@ public class SelectorNode : Node, IObserver<NodeState>, ICompositeNode
 
     public override void Run()
     {
-        SetNodeState(IsChildComplete() ? NodeState.Complete : NodeState.WaitForChild);
+        SetNodeState(NodeState.WaitForChild);
     }
 
     public override void Deactivate()
@@ -83,19 +78,15 @@ public class SelectorNode : Node, IObserver<NodeState>, ICompositeNode
 
     public override INode GetChildNode()
     {
-        Debug.Assert(childNodeList.Count != 0, "ID: " + GetId() + " は子ノードを持っていません");
-        foreach (INode node in childNodeList)
-        {
-            NodeState nodeState = node.GetNodeState();
-            if (nodeState == NodeState.Init)
-            {
-                childNode = node;
-                return childNode;
-            }
-        }
+        var childCount = childNodeList.Count;
+        Debug.Assert(childCount != 0, "ID: " + GetId() + " は子ノードを持っていません");
 
-        Debug.Assert(false, "Sequencer Node ID: " + GetId() + " は初期状態の子ノードを持っていません");
-        return null;
+        var selectedIndex = UnityEngine.Random.Range(0, childCount);
+        childNode = childNodeList[selectedIndex];
+        Debug.Assert(childNode.GetNodeState() == NodeState.Init, "Node ID: " + GetId() + " が返そうとした子ノードが初期状態ではありません");
+
+        Debug.Log("RandomNodeが選択したインデックス: " + selectedIndex);
+        return childNode;
     }
 
     public override bool IsRoot()
@@ -110,12 +101,6 @@ public class SelectorNode : Node, IObserver<NodeState>, ICompositeNode
 
     public override void OnCompleted()
     {
-        // 子ノードのどれかが完了した時のみ完了状態になる
-        if (!IsChildComplete())
-        {
-            return;
-        }
-
         Debug.Assert(childNode != null, "childNodeがnullです");
         Debug.Assert(childNode.GetNodeState() == NodeState.Complete, "なんか完了してない子供がアサインされている");
         Debug.Assert(nodeObservable != null, "nodeObservableがnullです");
@@ -124,7 +109,6 @@ public class SelectorNode : Node, IObserver<NodeState>, ICompositeNode
         SetNodeState(NodeState.Complete);
         executeResult = childNode.GetExecuteResultState();
         nodeObservable?.SendComplete();
-
     }
 
     public virtual List<INode> GetChildNodeList()

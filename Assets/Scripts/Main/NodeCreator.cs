@@ -57,7 +57,7 @@ public class NodeCreator : Manager<NodeCreator>
         selectorNode.AddNode(actionNode1, 1);
         var decoratorNode = (DecoratorNode)factory.Create(NodeType.Decorator);
         var decoratorFactory = FactoryManager.Instance.GetFactory<Decorator, DecoratorType>(FactoryType.Decorator);
-        var decorator = decoratorFactory.Create(DecoratorType.False);
+        var decorator = decoratorFactory.Create(DecoratorType.Not);
         decoratorNode.SetDecoratable(decorator);
         var actionNode2 = CreateSampleActionNode2();
         decoratorNode.AddNode(actionNode2);
@@ -121,6 +121,67 @@ public class NodeCreator : Manager<NodeCreator>
         conditionNode.AddNode(sequencerNode);
         sequencerNode.AddNode(actionNode1);
         rootNode.AddNode(conditionNode);
+        return rootNode;
+    }
+
+    public INode CreateTestNode8()
+    {
+        NodeFactory factory = FactoryManager.Instance.GetFactory<NodeFactory>(FactoryType.Node);
+        ConditionFactory conditionFactory = FactoryManager.Instance.GetFactory<ConditionFactory>(FactoryType.Condition);
+
+        var rootNode = factory.Create<RootNode>(NodeType.Root);
+        var randomNode = factory.Create<RandomNode>(NodeType.Random);
+        var actionNode1 = CreateSampleActionNode1();
+        var actionNode2 = CreateSampleActionNode2();
+        var actionNode3 = CreateSampleActionNode2();
+        randomNode.AddNode(actionNode1);
+        randomNode.AddNode(actionNode2);
+        randomNode.AddNode(actionNode3);
+        rootNode.AddNode(randomNode);
+        return rootNode;
+    }
+
+    public INode CreateRandomSequencerTest()
+    {
+        NodeFactory factory = FactoryManager.Instance.GetFactory<NodeFactory>(FactoryType.Node);
+        ConditionFactory conditionFactory = FactoryManager.Instance.GetFactory<ConditionFactory>(FactoryType.Condition);
+        DecoratorFactory decoratorFactory = FactoryManager.Instance.GetFactory<DecoratorFactory>(FactoryType.Decorator);
+
+        var rootNode = factory.Create<RootNode>(NodeType.Root);
+        RandomSequencerNode randomSequencerNode = factory.Create<RandomSequencerNode>(NodeType.RandomSequencer);
+        DecoratorNode decoratorNode = factory.Create<DecoratorNode>(NodeType.Decorator);
+        FalseDecorator not = decoratorFactory.Create<FalseDecorator>(DecoratorType.False);
+        decoratorNode.SetDecoratable(not);
+        var actionNode1 = CreateSampleActionNode1();
+        var actionNode2 = CreateSampleActionNode1();
+        var actionNode3 = CreateSampleActionNode2();
+        randomSequencerNode.AddNode(actionNode1);
+        randomSequencerNode.AddNode(actionNode2);
+        decoratorNode.AddNode(actionNode3);
+        randomSequencerNode.AddNode(decoratorNode);
+        rootNode.AddNode(randomSequencerNode);
+        return rootNode;
+    }
+
+    public INode CreateRandomSelectorTest()
+    {
+        NodeFactory factory = FactoryManager.Instance.GetFactory<NodeFactory>(FactoryType.Node);
+        ConditionFactory conditionFactory = FactoryManager.Instance.GetFactory<ConditionFactory>(FactoryType.Condition);
+        DecoratorFactory decoratorFactory = FactoryManager.Instance.GetFactory<DecoratorFactory>(FactoryType.Decorator);
+
+        var rootNode = factory.Create<RootNode>(NodeType.Root);
+        RandomSelectorNode randomSelectorNode = factory.Create<RandomSelectorNode>(NodeType.RandomSelector);
+        DecoratorNode decoratorNode = factory.Create<DecoratorNode>(NodeType.Decorator);
+        FalseDecorator not = decoratorFactory.Create<FalseDecorator>(DecoratorType.False);
+        decoratorNode.SetDecoratable(not);
+        var actionNode1 = CreateSampleActionNode1();
+        var actionNode2 = CreateSampleActionNode1();
+        var actionNode3 = CreateSampleActionNode2();
+        randomSelectorNode.AddNode(actionNode1);
+        randomSelectorNode.AddNode(actionNode2);
+        decoratorNode.AddNode(actionNode3);
+        randomSelectorNode.AddNode(decoratorNode);
+        rootNode.AddNode(randomSelectorNode);
         return rootNode;
     }
 
