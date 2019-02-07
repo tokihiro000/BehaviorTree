@@ -49,6 +49,7 @@ public enum ActionResultState
 
 public enum DecoratorType
 {
+    None,
     Not,
     True,
     False
@@ -56,12 +57,14 @@ public enum DecoratorType
 
 public enum ActionType
 {
+    None,
     Sample1,
     Sample2
 }
 
 public enum ConditionType
 {
+    None,
     Sample1,
     Repeat
 }

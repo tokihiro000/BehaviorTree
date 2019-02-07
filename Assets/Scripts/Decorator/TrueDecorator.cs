@@ -2,7 +2,7 @@
 
 public class TrueDecorator : Decorator
 {
-    internal protected TrueDecorator(DecoratorType type) : base(type)
+    protected internal TrueDecorator() : base()
     {
     }
 

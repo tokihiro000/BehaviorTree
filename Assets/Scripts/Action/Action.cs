@@ -2,15 +2,16 @@
 using System.Collections;
 
 public abstract class Action : IActionable {
+    protected ActionType actionType;
+    public virtual ActionType ActionType => this.actionType = ActionType.None;
+
     public IDisposable ActionDisposer => observable.disposer;
     protected ActionObservable observable;
     protected ActionResult actionResult;
     private Int64 actionId;
-    private ActionType actionType;
 
-    protected Action(ActionType type)
+    protected internal Action()
     {
-        this.actionType = type;
     }
 
     public void Init(Int64 id)

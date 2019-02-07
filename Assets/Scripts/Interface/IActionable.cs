@@ -1,5 +1,10 @@
 ﻿using System;
 public interface IActionable {
+    ActionType ActionType
+    {
+        get;
+    }
+
     IDisposable ActionDisposer
     {
         get;

@@ -2,7 +2,7 @@
 
 public class NotDecorator : Decorator
 {
-    internal protected NotDecorator(DecoratorType type) : base(type) {
+    protected internal NotDecorator() : base() {
     }
 
     protected sealed override Func<ExecuteResult, ExecuteResult> MakeDecoraterFunc1()

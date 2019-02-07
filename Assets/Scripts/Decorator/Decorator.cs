@@ -3,16 +3,17 @@ using UnityEngine;
 
 public abstract class Decorator : IDecoratable
 {
+    protected DecoratorType decoratorType;
+    public virtual DecoratorType DecoratorType => this.decoratorType = DecoratorType.None;
+
     INode targetChild, targetOwner;
     private Func<ExecuteResult, ExecuteResult> evalFunc1;
     private Func<ExecuteResult, INode, ExecuteResult> evalFunc2;
     private Func<ExecuteResult, INode, INode, ExecuteResult> evalFunc3;
-    private DecoratorType decoratorType;
     private Int64 id;
 
-    protected Decorator(DecoratorType type)
+    protected internal Decorator()
     {
-        this.decoratorType = type;
     }
 
     public void Init(Int64 decoratorId)
@@ -57,11 +58,6 @@ public abstract class Decorator : IDecoratable
             Debug.Assert(false, "Decoratorのコールバックが全てnullです");
             return new ExecuteResult(ExecuteResultState.Failure);
         }
-    }
-
-    public DecoratorType GetDecoratorType()
-    {
-        return this.decoratorType;
     }
 
     protected abstract Func<ExecuteResult, ExecuteResult> MakeDecoraterFunc1();

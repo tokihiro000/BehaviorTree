@@ -25,10 +25,10 @@ public class ConditionFactory : IFactory<Condition, ConditionType>
         switch (type)
         {
             case ConditionType.Sample1:
-                condition = new SampleCondition(type);
+                condition = new SampleCondition();
                 break;
             case ConditionType.Repeat:
-                condition = new RepeatCondition(type);
+                condition = new RepeatCondition();
                 break;
             default:
                 Debug.Assert(false, "未定義のコンディションタイプ");

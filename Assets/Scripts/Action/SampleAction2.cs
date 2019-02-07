@@ -3,7 +3,9 @@ using UnityEngine;
 
 public class SampleAction2 : Action
 {
-    internal protected SampleAction2(ActionType type) : base(type)
+    public override ActionType ActionType => this.actionType = ActionType.Sample1;
+
+    internal protected SampleAction2() : base()
     {
     }
 
