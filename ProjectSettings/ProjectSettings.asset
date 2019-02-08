@@ -649,7 +649,7 @@ PlayerSettings:
   cloudServicesEnabled:
     UNet: 1
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: 50de9e86-161d-47c5-a10a-98270aa8d267
   projectName: BehaviorTree
   organizationId: tokihiro000
